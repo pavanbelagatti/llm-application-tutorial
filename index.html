@@ -1,0 +1,35 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Interaction</title>
+</head>
+<body>
+    <h1>Ask the Language Model</h1>
+    <form id="promptForm">
+        <textarea id="prompt" rows="4" cols="50" placeholder="Enter your prompt here..."></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Response:</h2>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('promptForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const promptText = document.getElementById('prompt').value;
+            const response = await fetch('/generate-text', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: promptText }),
+            });
+            const data = await response.json();
+            document.getElementById('response').innerText = data.generated_text || "No response generated.";
+        };
+    </script>
+</body>
+</html>
